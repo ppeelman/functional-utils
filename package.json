@@ -1,0 +1,29 @@
+{
+  "name": "functional-utils",
+  "version": "1.0.0",
+  "description": "Functional Programming utilities - Maybe / Either / ...",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ppeelman/functional-utils.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ppeelman/functional-utils/issues"
+  },
+  "homepage": "https://github.com/ppeelman/functional-utils#readme",
+  "dependencies": {
+    "typescript": "^4.3.5"
+  }
+}
