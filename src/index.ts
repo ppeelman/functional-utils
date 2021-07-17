@@ -1,2 +1,1 @@
-export abstract class Maybe {
-}
+export {Maybe, Just, Nothing} from './maybe';
