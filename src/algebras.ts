@@ -1,10 +1,27 @@
-// 'this' type in TypeScript
-// https://levelup.gitconnected.com/typescript-advanced-types-this-type-and-dynamic-types-ecb99c4ec275#:~:text=In%20TypeScript%2C%20we%20can%20use,the%20instance%20of%20a%20class.
+// SETOID
+// equals :: Setoid a => a ~> a -> Boolean
+//
+// Sources:
+// - https://github.com/fantasyland/fantasy-land#setoid
+// - http://www.tomharding.me/2017/03/09/fantas-eel-and-specification-3/
 
-export interface Setoid<Type> {
-    equals: (v: Type) => boolean;
+import {hasMethod} from './utils';
+
+export interface Setoid<T> {
+    equals: (v: T) => boolean;
 }
 
-export interface Ord<Type> {
-    lte: (v: Type) => boolean;
+export const isSetoid = (v: any): v is Setoid<any> => hasMethod(v, 'equals')
+
+// ORD
+// lte :: Ord a => a ~> a -> Boolean
+//
+// Sources
+// - https://github.com/fantasyland/fantasy-land#ord
+// - http://www.tomharding.me/2017/04/09/fantas-eel-and-specification-3.5/
+
+export interface Ord<T> {
+    lte: (v: T) => boolean;
 }
+
+export const isOrd = (v: any): v is Ord<any> => hasMethod(v, 'lte')

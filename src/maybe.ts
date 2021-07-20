@@ -1,20 +1,48 @@
 import {isNullOrUndefined} from './utils';
-import {Setoid} from './algebras';
+import {Ord, Setoid} from './algebras';
 
-export interface Maybe<T> extends Setoid<Maybe<T>> {
+// More complex alternative(s):
+// https://github.com/sanctuary-js/sanctuary-maybe
+
+export interface IMaybe<T> extends Setoid<Maybe<T>> {
     map<K = any>(fn: (v: T) => K): Maybe<K>;
 }
 
-export class Just<T> implements Maybe<T> {
-    private constructor(private readonly _x: T) {}
+export abstract class Maybe<T> implements IMaybe<T>{
+   protected constructor() {}
 
-    public static of<K = any>(v: K): Just<K> {
-        return new Just<K>(v);
+   public static of<K = any>(value: K): Maybe<K> {
+       return new Just(value);
+   }
+
+   public abstract map<K = any>(fn: (v: T) => K): Maybe<K>;
+   public abstract equals(other: Maybe<T>): boolean;
+}
+
+class _Nothing extends Maybe<undefined> {
+    public constructor() {
+        super();
+    }
+
+    public map<K = any>(fn: (v: any) => K): Maybe<K> {
+        return new _Nothing();
+    }
+
+    public equals(other: Maybe<any>): boolean {
+        return other instanceof _Nothing;
+    }
+}
+
+export const Nothing = new _Nothing();
+
+class Just<T> extends Maybe<T> {
+    public constructor(private readonly _x: T) {
+        super();
     }
 
     public map<K = any>(fn: (v: T) => K): Maybe<K> {
-        const result = fn(this._x);
-        return isNullOrUndefined(result) ? nothing() : just(result);
+        const result: K = fn(this._x);
+        return isNullOrUndefined(result) ? Nothing : just(result);
     }
 
     public equals(other: Maybe<T>): boolean {
@@ -22,10 +50,4 @@ export class Just<T> implements Maybe<T> {
     }
 }
 
-export const Nothing: Maybe<any> = {
-    map: (fn: (v: any) => any) => Nothing,
-    equals: (v: any) => v === this
-}
-
-export const just = <T = any>(v: T) => Just.of(v);
-export const nothing = <T = any>() => Nothing;
+export const just = <T>(value: T) => new Just(value);
