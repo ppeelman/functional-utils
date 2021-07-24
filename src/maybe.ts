@@ -1,22 +1,24 @@
 import {isNullOrUndefined} from './utils';
-import {Ord, Setoid} from './algebras';
+import {Setoid} from './setoid';
 
 // More complex alternative(s):
 // https://github.com/sanctuary-js/sanctuary-maybe
 
-export interface IMaybe<T> extends Setoid<Maybe<T>> {
+export interface IMaybe<T> extends Setoid<T> {
     map<K = any>(fn: (v: T) => K): Maybe<K>;
 }
 
-export abstract class Maybe<T> implements IMaybe<T>{
-   protected constructor() {}
+export abstract class Maybe<T> implements IMaybe<T> {
+    protected constructor() {
+    }
 
-   public static of<K = any>(value: K): Maybe<K> {
-       return new Just(value);
-   }
+    public static of<K = any>(value: K): Maybe<K> {
+        return new Just(value);
+    }
 
-   public abstract map<K = any>(fn: (v: T) => K): Maybe<K>;
-   public abstract equals(other: Maybe<T>): boolean;
+    public abstract map<K = any>(fn: (v: T) => K): Maybe<K>;
+
+    public abstract equals(other: Maybe<T>): boolean;
 }
 
 class _Nothing extends Maybe<undefined> {
@@ -25,7 +27,7 @@ class _Nothing extends Maybe<undefined> {
     }
 
     public map<K = any>(fn: (v: any) => K): Maybe<K> {
-        return new _Nothing();
+        return this;
     }
 
     public equals(other: Maybe<any>): boolean {
